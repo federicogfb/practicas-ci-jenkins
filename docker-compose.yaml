@@ -1,0 +1,30 @@
+version: "3.8"
+services:
+  webapp:
+    build: .
+    ports:
+      - target: 5000
+        published: 5000
+        protocol: tcp
+        mode: host
+    restart: always
+    networks:
+      - mynet
+
+  redis:
+    image: redis:latest
+    networks:
+      - mynet
+
+  rediscommander:
+    image: rediscommander/redis-commander:latest
+    #(https://hub.docker.com/r/rediscommander/redis-commander) -> env variable and ports in there.
+    environment:
+      - REDIS_HOSTS=local:redis:6379
+    ports:
+      - "8081:8081"
+    networks:
+      - mynet
+
+networks:
+  mynet:
